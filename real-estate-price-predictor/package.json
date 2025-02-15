@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
-    "brain.js": "^1.6.1",
+    "brain.js": "^2.0.0-beta.24",
     "chart.js": "^4.4.7",
+    "node-gyp": "^9.4.1",
+    "papaparse": "^5.5.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwindcss": "^4.0.6"

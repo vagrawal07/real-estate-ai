@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import PropertyForm from "./components/Form";
+import { trainModel, normalizeInput } from "./models/brainModel";
+import { loadJSON } from "./utils/preprocess";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [trainedNet, setTrainedNet] = useState(null);
+    const [prediction, setPrediction] = useState(null);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    useEffect(() => {
+        async function fetchDataAndTrainModel() {
+            const jsonData = await loadJSON("/synthetic_real_estate_data.json");
+            const trainingData = jsonData.map(item => ({
+                input: normalizeInput(item),
+                output: { price: (item.price - 50000) / (1000000 - 50000) }
+            }));
+
+            const net = trainModel(trainingData);
+            setTrainedNet(net);
+        }
+
+        fetchDataAndTrainModel();
+    }, []);
+
+    const handleFormSubmit = (data) => {
+        if (!trainedNet) {
+            alert("Model is still training. Try again in a few seconds.");
+            return;
+        }
+
+        const normalizedInput = normalizeInput(data);
+        const output = trainedNet.run(normalizedInput);
+        const predictedPrice = output.price * 1000000; // Convert back from normalized value
+
+        setPrediction(predictedPrice.toFixed(2));
+    };
+
+    return (
+        <div className="container mx-auto p-6">
+            <h1 className="text-3xl font-bold text-center mb-6">🏡 Real Estate Price Predictor</h1>
+            <PropertyForm onSubmit={handleFormSubmit} />
+            {prediction && <p className="text-center text-green-600 text-2xl mt-4">💰 Predicted Price: ${prediction}</p>}
+        </div>
+    );
 }
 
-export default App
+export default App;
