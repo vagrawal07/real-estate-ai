@@ -1,5 +1,5 @@
 import { useState } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 function PropertyForm({ onSubmit }) {
     const [formData, setFormData] = useState({
@@ -21,33 +21,55 @@ function PropertyForm({ onSubmit }) {
     };
 
     return (
-        <div className="max-w-lg mx-auto bg-white p-8 shadow-xl rounded-2xl border border-gray-200">
-            <h2 className="text-3xl font-bold text-gray-700 text-center mb-6">🏡 Enter Property Details</h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                    <label className="block text-gray-600 font-semibold mb-1">📏 Area (sq ft)</label>
-                    <input type="number" name="area" value={formData.area} onChange={handleChange} className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400" required placeholder="Enter property area" />
-                </div>
-                <div>
-                    <label className="block text-gray-600 font-semibold mb-1">🛏 Bedrooms</label>
-                    <input type="number" name="bedrooms" value={formData.bedrooms} onChange={handleChange} className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400" required placeholder="Enter number of bedrooms" />
-                </div>
-                <div>
-                    <label className="block text-gray-600 font-semibold mb-1">🚿 Bathrooms</label>
-                    <input type="number" name="bathrooms" value={formData.bathrooms} onChange={handleChange} className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400" required placeholder="Enter number of bathrooms" />
-                </div>
-                <div>
-                    <label className="block text-gray-600 font-semibold mb-1">📍 Location</label>
-                    <input type="text" name="location" value={formData.location} onChange={handleChange} className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400" required placeholder="Enter property location" />
-                </div>
-                <div>
-                    <label className="block text-gray-600 font-semibold mb-1">🏗 Age of Property (years)</label>
-                    <input type="number" name="age" value={formData.age} onChange={handleChange} className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400" required placeholder="Enter age of property" />
-                </div>
-                <button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-lg font-semibold text-lg hover:opacity-90 transition duration-300">
-                    🚀 Predict Price
-                </button>
-            </form>
+        <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            height: '100vh', 
+            width: '100vw', 
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+            padding: '20px' 
+        }}>
+            <div className="container card shadow-lg p-4" style={{ 
+                width: '100%', 
+                maxWidth: '600px', 
+                backgroundColor: 'white', 
+                borderRadius: '15px', 
+                border: '1px solid #ddd', 
+                textAlign: 'center',
+                padding: '30px'
+            }}>
+                <h2 className="text-center mb-4" style={{ fontWeight: 'bold', color: '#333' }}>🏡 Enter Property Details</h2>
+                <form onSubmit={handleSubmit}>
+                    {[
+                        { label: "📏 Area (sq ft)", name: "area", type: "number", placeholder: "Enter property area" },
+                        { label: "🛏 Bedrooms", name: "bedrooms", type: "number", placeholder: "Enter number of bedrooms" },
+                        { label: "🚿 Bathrooms", name: "bathrooms", type: "number", placeholder: "Enter number of bathrooms" },
+                        { label: "📍 Location", name: "location", type: "text", placeholder: "Enter property location" },
+                        { label: "🏗 Age of Property (years)", name: "age", type: "number", placeholder: "Enter age of property" }
+                    ].map(({ label, name, type, placeholder }) => (
+                        <div key={name} className="mb-3">
+                            <label className="form-label" style={{ fontWeight: '600', color: '#555' }}>{label}</label>
+                            <input
+                                type={type}
+                                name={name}
+                                value={formData[name]}
+                                onChange={handleChange}
+                                className="form-control text-center"
+                                required
+                                placeholder={placeholder}
+                            />
+                        </div>
+                    ))}
+                    <button
+                        type="submit"
+                        className="btn btn-primary w-100 mt-3"
+                        style={{ padding: '10px', fontSize: '16px', fontWeight: 'bold' }}
+                    >
+                        🚀 Predict Price
+                    </button>
+                </form>
+            </div>
         </div>
     );
 }
